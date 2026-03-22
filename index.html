@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Atlas</title>
+    <meta name="description" content="행성 문명 중심의 우주 시뮬레이션 인터페이스">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="app-shell">
+    <div class="noise"></div>
+    <main class="stage panel">
+        <div id="universe-canvas" class="viewport-canvas" aria-label="Interactive space viewport"></div>
+        <div class="viewport-vignette"></div>
+
+        <header class="topbar overlay-shell">
+            <div class="brand-block">
+                <p class="eyebrow">심우주 문명 관측망</p>
+                <h1>Stellar Atlas</h1>
+            </div>
+            <div class="topbar-actions">
+                <button id="toggle-log" class="detail-button" type="button">로그 기록</button>
+                <button id="toggle-search" class="detail-button" type="button">행성 목록</button>
+                <div id="log-block" class="log-block overlay-panel">
+                    <div class="log-block-head">
+                        <div class="section-heading">
+                            <p class="eyebrow">은하 기록 보관소</p>
+                            <h3>중요 사건 연대기</h3>
+                        </div>
+                        <button id="close-log" class="detail-close detail-close-small" type="button" aria-label="로그 패널 닫기">닫기</button>
+                    </div>
+                    <section class="archive-section">
+                        <div class="archive-title-row">
+                            <p class="eyebrow">중요 로그</p>
+                            <span class="archive-subtitle">전쟁, 조약, 제재, 붕괴 징후</span>
+                        </div>
+                        <ul id="important-log-feed" class="archive-feed archive-feed-important"></ul>
+                    </section>
+                    <section class="archive-section">
+                        <div class="archive-title-row">
+                            <p class="eyebrow">전체 로그</p>
+                            <span class="archive-subtitle">최근 관측 기록</span>
+                        </div>
+                        <ul id="archive-log-feed" class="archive-feed"></ul>
+                    </section>
+                </div>
+            </div>
+            <div id="search-block" class="search-block overlay-panel">
+                <label for="planet-search">행성 문명 검색</label>
+                <input id="planet-search" type="search" placeholder="행성 또는 문명 이름 검색">
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </header>
+
+        <section id="selection-brief" class="selection-brief overlay-panel">
+            <div class="selection-brief-copy">
+                <p class="eyebrow">선택된 문명</p>
+                <h2 id="hero-title">아이테라 프라임</h2>
+                <p id="hero-summary" class="hero-summary">
+                    해양 무역 문명으로 성장한 기술관료 행성. 외교 영향력은 강하지만 군사 확장은 신중하다.
+                </p>
+            </div>
+            <div class="selection-brief-meta">
+                <div class="hud-chip compact">
+                    <span>긴장</span>
+                    <strong id="tension-label">자원 경쟁</strong>
+                </div>
+                <div class="hud-chip compact">
+                    <span>과제</span>
+                    <strong id="focus-label">궤도 안정화</strong>
+                </div>
+                <button id="open-detail" class="detail-button" type="button">상세 보기</button>
+            </div>
+        </section>
+
+        <aside id="detail-dock" class="detail-dock overlay-panel">
+            <div class="detail-dock-head">
+                <div class="section-heading">
+                    <p class="eyebrow">선택된 행성</p>
+                    <h2 id="planet-name">아이테라 프라임</h2>
+                </div>
+                <button id="close-detail" class="detail-close" type="button" aria-label="상세 패널 닫기">닫기</button>
+            </div>
+
+            <section class="detail-block detail-block-wide">
+                <dl class="info-grid compact">
+                    <div>
+                        <dt>환경</dt>
+                        <dd id="planet-biome">해양 아콜로지</dd>
+                    </div>
+                    <div>
+                        <dt>체제</dt>
+                        <dd id="planet-government">기술 평의회</dd>
+                    </div>
+                    <div>
+                        <dt>인구</dt>
+                        <dd id="planet-population">92억</dd>
+                    </div>
+                    <div>
+                        <dt>위협도</dt>
+                        <dd id="planet-threat">보통</dd>
+                    </div>
+                </dl>
+                <div class="detail-wide-copy">
+                    <p id="planet-description" class="body-copy">
+                        에너지 채집 해상 플랫폼과 고밀도 궤도 상업권을 기반으로 번영하는 문명이다.
+                    </p>
+                    <div id="current-action" class="action-card action-card-compact"></div>
+                </div>
+            </section>
+
+            <section class="detail-block detail-block-metrics">
+                <div class="section-heading">
+                    <p class="eyebrow">문명 지표</p>
+                    <h3>핵심 수치</h3>
+                </div>
+                <div id="metric-grid" class="metric-grid"></div>
+            </section>
+
+            <section class="detail-block detail-block-policy">
+                <div class="section-heading">
+                    <p class="eyebrow">정책 편집</p>
+                    <h3>문명 운영</h3>
+                </div>
+                <div id="policy-editor" class="control-grid"></div>
+            </section>
+
+            <section class="detail-block detail-block-profile">
+                <div class="section-heading">
+                    <p class="eyebrow">AI 성향</p>
+                    <h3>행동 편향</h3>
+                </div>
+                <div id="ai-editor" class="control-grid"></div>
+            </section>
+
+            <section class="detail-block detail-block-log">
+                <div class="section-heading">
+                    <p class="eyebrow">전송 로그</p>
+                    <h3>최근 사건</h3>
+                </div>
+                <ul id="event-feed" class="event-feed"></ul>
+            </section>
+        </aside>
+
+        <footer class="bottom-hud overlay-panel">
+            <div class="hud-cluster hud-cluster-left">
+                <div class="hud-group">
+                    <span class="hud-label">조작</span>
+                    <strong class="hud-hint">드래그 회전 · 휠 줌 · 클릭 선택</strong>
+                </div>
+                <div class="hud-group">
+                    <span class="hud-label">연대기</span>
+                    <strong id="sim-year">주기 2473.04</strong>
+                </div>
+                <div class="hud-group">
+                    <span class="hud-label">상태</span>
+                    <strong id="sim-state">자동 관측 진행 / 1배속</strong>
+                </div>
+            </div>
+            <div class="hud-cluster hud-cluster-center">
+                <div class="speed-controls" aria-label="시뮬레이션 속도 조절">
+                    <button class="speed-button" data-speed="0">정지</button>
+                    <button class="speed-button is-active" data-speed="1">1배속</button>
+                    <button class="speed-button" data-speed="4">4배속</button>
+                    <button class="speed-button" data-speed="12">12배속</button>
+                </div>
+            </div>
+            <div class="hud-cluster hud-cluster-right">
+                <div class="hud-group">
+                    <span class="hud-label">관측 문명 수</span>
+                    <strong id="civilization-count">06</strong>
+                </div>
+                <div class="hud-group hud-group-right">
+                    <span class="hud-label">관측 모드</span>
+                    <strong id="selection-mode">행성 주권 시점</strong>
+                </div>
+                <div class="hud-actions">
+                    <button id="focus-center" class="detail-button" type="button">중심 시점</button>
+                    <button id="reset-universe" class="reset-button" type="button">우주 리셋</button>
+                </div>
+            </div>
+        </footer>
+    </main>
+</div>
+<script type="module" src="/js/main.js"></script>
+</body>
+</html>
