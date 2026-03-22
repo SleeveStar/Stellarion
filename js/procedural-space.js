@@ -5,37 +5,46 @@ export function createProceduralDeepSpace(THREE) {
     const foregroundLayer = new THREE.Group();
 
     const farStars = createStarShell(THREE, {
-        count: 7600,
+        count: 10400,
         radiusMin: 250,
         radiusMax: 430,
-        size: 0.46,
-        opacity: 0.9,
+        size: 0.48,
+        opacity: 0.94,
         bias: 1.18,
         yScale: 1
     });
     const nearStars = createStarShell(THREE, {
-        count: 3800,
+        count: 5600,
         radiusMin: 170,
         radiusMax: 280,
-        size: 0.56,
-        opacity: 0.96,
+        size: 0.58,
+        opacity: 0.98,
         bias: 0.94,
         yScale: 0.96
     });
+    const stellarBulge = createStarShell(THREE, {
+        count: 6200,
+        radiusMin: 68,
+        radiusMax: 228,
+        size: 0.36,
+        opacity: 0.82,
+        bias: 0.62,
+        yScale: 0.46
+    });
     const centralCluster = createStarShell(THREE, {
-        count: 2600,
+        count: 4200,
         radiusMin: 24,
         radiusMax: 146,
-        size: 0.3,
-        opacity: 0.7,
+        size: 0.32,
+        opacity: 0.76,
         bias: 0.54,
         yScale: 0.34
     });
     const brightStars = createStarShell(THREE, {
-        count: 240,
+        count: 420,
         radiusMin: 32,
-        radiusMax: 196,
-        size: 1.18,
+        radiusMax: 236,
+        size: 1.08,
         opacity: 0.98,
         bias: 0.76,
         yScale: 0.88
@@ -45,7 +54,7 @@ export function createProceduralDeepSpace(THREE) {
     const nebulae = createNebulaField(THREE);
 
     backgroundLayer.add(farStars, milkyWay.group, galaxies.group, nebulae.group);
-    deepLayer.add(nearStars);
+    deepLayer.add(nearStars, stellarBulge);
     foregroundLayer.add(centralCluster, brightStars);
     root.add(backgroundLayer, deepLayer, foregroundLayer);
 

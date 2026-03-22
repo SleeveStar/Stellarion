@@ -252,7 +252,7 @@ export class UniverseRenderer {
             const selected = entry.planet.id === this.state.selectedPlanetId;
             const hovered = entry.planet.id === this.hoverPlanetId;
             entry.highlight.visible = selected || hovered;
-            entry.highlight.material.opacity = selected ? 0.2 : hovered ? 0.1 : 0;
+            entry.highlight.material.uniforms.uOpacity.value = selected ? 0.58 : hovered ? 0.28 : 0;
             entry.body.scale.setScalar(hovered ? 1.02 : 1);
         });
     }
@@ -318,14 +318,8 @@ function createPlanetEntry(THREE, planet) {
     root.add(atmosphere);
 
     const highlight = new THREE.Mesh(
-        new THREE.SphereGeometry(planet.radius * 1.1, 24, 18),
-        new THREE.MeshBasicMaterial({
-            color: lightenHex(planet.accent, 34),
-            transparent: true,
-            opacity: 0,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-        })
+        new THREE.SphereGeometry(planet.radius * 1.085, 32, 24),
+        createPlanetHighlightMaterial(THREE, lightenHex(planet.accent, 34))
     );
     highlight.visible = false;
     root.add(highlight);
@@ -1135,6 +1129,41 @@ function createShipModel(THREE, spec, color) {
 
     ship.add(hull, bridge, nose, tail);
     return ship;
+}
+
+function createPlanetHighlightMaterial(THREE, color) {
+    return new THREE.ShaderMaterial({
+        uniforms: {
+            uColor: { value: new THREE.Color(color) },
+            uOpacity: { value: 0 },
+            uPower: { value: 2.8 }
+        },
+        vertexShader: `
+            uniform float uPower;
+            varying float vRim;
+
+            void main() {
+                vec3 worldNormal = normalize(normalMatrix * normal);
+                vec3 viewDirection = normalize(-(modelViewMatrix * vec4(position, 1.0)).xyz);
+                vRim = pow(1.0 - max(dot(worldNormal, viewDirection), 0.0), uPower);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform vec3 uColor;
+            uniform float uOpacity;
+            varying float vRim;
+
+            void main() {
+                float rim = smoothstep(0.28, 1.0, vRim);
+                gl_FragColor = vec4(uColor, rim * uOpacity);
+            }
+        `,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending
+    });
 }
 
 function createOffsets(seed, count) {
