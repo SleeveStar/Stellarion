@@ -111,7 +111,7 @@ export class UniverseRenderer {
     }
 
     setState(state) {
-        if (this.state?.selectedPlanetId !== state.selectedPlanetId) {
+        if (this.selectedPlanetId !== state.selectedPlanetId) {
             this.centerViewLocked = false;
         }
         this.state = state;

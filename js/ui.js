@@ -22,6 +22,7 @@ export function createUI(handlers) {
         searchInput: document.getElementById("planet-search"),
         searchResults: document.getElementById("search-results"),
         searchBlock: document.getElementById("search-block"),
+        toggleMusicButton: document.getElementById("toggle-music"),
         toggleSearchButton: document.getElementById("toggle-search"),
         logBlock: document.getElementById("log-block"),
         toggleLogButton: document.getElementById("toggle-log"),
@@ -40,6 +41,7 @@ export function createUI(handlers) {
     };
 
     dom.searchInput.addEventListener("input", (event) => handlers.search(event.target.value));
+    dom.toggleMusicButton.addEventListener("click", handlers.toggleMusic);
     dom.toggleSearchButton.addEventListener("click", handlers.toggleSearch);
     dom.toggleLogButton.addEventListener("click", handlers.toggleLog);
     dom.closeLogButton.addEventListener("click", handlers.closeLog);
@@ -64,6 +66,7 @@ export function createUI(handlers) {
             dom.simState.textContent = state.speed === 0 ? "일시 정지 / 전술 대기" : `자동 관측 진행 / ${state.speed}배속`;
             dom.simYear.textContent = `주기 ${state.year}.${String(state.cycle).padStart(2, "0")}`;
             dom.selectionMode.textContent = state.selectionMode;
+            dom.toggleMusicButton.textContent = state.musicEnabled === false ? "음악 켜기" : "음악 끄기";
             dom.stage.classList.toggle("detail-open", Boolean(state.detailPanelOpen));
             dom.selectionBrief.classList.toggle("is-hidden", !hasSelection || Boolean(state.detailPanelOpen));
             dom.detailDock.classList.toggle("is-open", hasSelection && Boolean(state.detailPanelOpen));

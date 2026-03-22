@@ -9,13 +9,15 @@ if (typeof window !== "undefined") {
 }
 
 function bootstrap() {
-    initBackgroundMusic();
+    const music = initBackgroundMusic();
     let state = loadUniverseState(createRandomUniverse);
     state.selectedPlanetId = null;
     state.detailPanelOpen = false;
     state.detailPanelOpen = Boolean(state.detailPanelOpen);
     state.searchPanelOpen = Boolean(state.searchPanelOpen);
     state.logPanelOpen = Boolean(state.logPanelOpen);
+    state.musicEnabled = state.musicEnabled !== false;
+    music.setEnabled(state.musicEnabled);
     let renderer;
     let hoverPlanetId = null;
     let lastTime = performance.now();
@@ -30,11 +32,14 @@ function bootstrap() {
             saveUniverseState(state);
         },
         resetUniverse() {
+            const musicEnabled = state.musicEnabled;
             state = resetUniverseState(createRandomUniverse);
             state.detailPanelOpen = false;
             state.searchPanelOpen = false;
             state.logPanelOpen = false;
+            state.musicEnabled = musicEnabled;
             hoverPlanetId = null;
+            music.setEnabled(state.musicEnabled);
             renderer.setState(state);
             renderer.focusCenter();
             render();
@@ -69,6 +74,12 @@ function bootstrap() {
         },
         closeLog() {
             state.logPanelOpen = false;
+            render();
+            saveUniverseState(state);
+        },
+        toggleMusic() {
+            state.musicEnabled = !state.musicEnabled;
+            music.setEnabled(state.musicEnabled);
             render();
             saveUniverseState(state);
         },
@@ -152,11 +163,17 @@ function bootstrap() {
 
 function initBackgroundMusic() {
     const audio = document.getElementById("bgm-player");
-    if (!audio) return;
+    if (!audio) {
+        return {
+            setEnabled() {}
+        };
+    }
 
     audio.volume = 0.42;
+    let enabled = true;
 
     const tryPlay = () => {
+        if (!enabled) return;
         const playback = audio.play();
         if (playback && typeof playback.catch === "function") {
             playback.catch(() => {
@@ -178,4 +195,15 @@ function initBackgroundMusic() {
     window.addEventListener("pointerdown", unlockPlayback, { passive: true });
     window.addEventListener("keydown", unlockPlayback, { passive: true });
     window.addEventListener("touchstart", unlockPlayback, { passive: true });
+
+    return {
+        setEnabled(nextEnabled) {
+            enabled = nextEnabled;
+            if (enabled) {
+                tryPlay();
+                return;
+            }
+            audio.pause();
+        }
+    };
 }
