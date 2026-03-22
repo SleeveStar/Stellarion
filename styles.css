@@ -1159,6 +1159,18 @@ input {
         max-height: min(58vh, 520px);
     }
 
+    .log-block {
+        left: 50%;
+        right: auto;
+        width: min(calc(100vw - 24px), 440px);
+        max-height: min(64vh, 560px);
+        transform: translateX(-50%) translateY(-8px) scale(0.98);
+    }
+
+    .log-block.is-open {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
     .selection-brief {
         left: 12px;
         right: 12px;
