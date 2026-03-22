@@ -1,6 +1,6 @@
 @font-face {
     font-family: "PretendardLocal";
-    src: url("/fonts/Pretendard-1.3.9/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
+    src: url("./fonts/Pretendard-1.3.9/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
     font-weight: 45 920;
     font-style: normal;
     font-display: swap;
@@ -1081,5 +1081,267 @@ input {
 
     .hud-actions {
         margin-left: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    body {
+        overflow: hidden;
+    }
+
+    .stage {
+        min-height: 100dvh;
+        display: block;
+    }
+
+    .viewport-canvas,
+    .viewport-vignette {
+        position: absolute;
+        inset: 0;
+    }
+
+    .overlay-shell,
+    .overlay-panel {
+        position: absolute;
+    }
+
+    .topbar {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(148px, auto);
+        align-items: start;
+        gap: 10px;
+    }
+
+    .brand-block .eyebrow {
+        display: none;
+    }
+
+    .brand-block h1 {
+        font-size: 1.22rem;
+        letter-spacing: -0.04em;
+    }
+
+    .topbar-actions {
+        margin-left: 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: min(204px, 48vw);
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .topbar-actions .detail-button,
+    .hud-actions .detail-button,
+    .hud-actions .reset-button,
+    .speed-button {
+        padding: 8px 10px;
+        font-size: 0.74rem;
+    }
+
+    .topbar-actions .detail-button {
+        width: 100%;
+        min-width: 0;
+        white-space: nowrap;
+    }
+
+    .search-block,
+    .log-block {
+        top: 54px;
+        left: 0;
+        right: auto;
+        width: min(calc(100vw - 24px), 420px);
+        max-height: min(58vh, 520px);
+    }
+
+    .selection-brief {
+        left: 12px;
+        right: 12px;
+        bottom: 132px;
+        width: auto;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 11px 12px;
+        border-radius: 18px;
+    }
+
+    .selection-brief-copy h2 {
+        font-size: 1rem;
+    }
+
+    .selection-brief-copy .hero-summary {
+        margin-top: 5px;
+        font-size: 0.77rem;
+        line-height: 1.36;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .selection-brief-meta {
+        min-width: 0;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 7px;
+        align-items: center;
+    }
+
+    .selection-brief-meta .hud-chip:first-child {
+        display: none;
+    }
+
+    .selection-brief-meta .hud-chip {
+        min-width: 0;
+    }
+
+    .selection-brief-meta .hud-chip,
+    .selection-brief-meta .detail-button {
+        padding: 8px 10px;
+    }
+
+    .selection-brief-meta .hud-chip strong {
+        font-size: 0.76rem;
+    }
+
+    .detail-dock {
+        left: 12px;
+        right: 12px;
+        top: auto;
+        bottom: 12px;
+        width: auto;
+        max-height: min(74dvh, 760px);
+        padding: 10px;
+        border-radius: 22px;
+        transform: translateY(18px);
+        grid-template-columns: 1fr;
+        gap: 8px;
+        overflow: auto;
+        z-index: 5;
+    }
+
+    .detail-dock.is-open {
+        transform: translateY(0);
+    }
+
+    .detail-dock-head,
+    .detail-block-wide,
+    .detail-block-metrics,
+    .detail-block-policy,
+    .detail-block-profile,
+    .detail-block-log {
+        grid-column: 1 / -1;
+    }
+
+    .detail-dock .metric-grid,
+    .detail-dock .control-grid,
+    .detail-block-profile .control-grid,
+    .detail-block-wide .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-dock .section-heading h2 {
+        font-size: 0.92rem;
+    }
+
+    .detail-dock .section-heading h3 {
+        font-size: 0.74rem;
+    }
+
+    .detail-dock .body-copy,
+    .detail-dock .info-grid dd,
+    .event-feed span {
+        font-size: 0.72rem;
+    }
+
+    .detail-block,
+    .metric-card,
+    .event-feed li,
+    .control-field,
+    .action-card {
+        border-radius: 14px;
+    }
+
+    .bottom-hud {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        border-radius: 18px;
+    }
+
+    .hud-cluster {
+        min-width: 0;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .hud-cluster-left {
+        display: none;
+    }
+
+    .hud-cluster-center {
+        justify-content: center;
+        order: 3;
+    }
+
+    .hud-cluster-right {
+        justify-content: space-between;
+        order: 1;
+    }
+
+    .hud-cluster-right .hud-group {
+        min-width: 0;
+    }
+
+    .hud-group {
+        gap: 6px;
+    }
+
+    .hud-group-right {
+        display: none;
+    }
+
+    .hud-label,
+    .hud-chip span {
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+    }
+
+    .hud-group strong,
+    .hud-chip strong {
+        font-size: 0.78rem;
+    }
+
+    .hud-actions {
+        margin-left: 0;
+        display: flex;
+        width: 100%;
+        gap: 6px;
+        justify-content: stretch;
+    }
+
+    .hud-actions .detail-button,
+    .hud-actions .reset-button {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .speed-controls {
+        width: 100%;
+        justify-content: center;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .speed-button {
+        flex: 1 1 calc(25% - 5px);
+        min-width: 0;
     }
 }
