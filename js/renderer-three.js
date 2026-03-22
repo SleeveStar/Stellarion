@@ -106,8 +106,8 @@ export class UniverseRenderer {
         const canvas = this.renderer.domElement;
         canvas.addEventListener("pointerdown", (event) => this.onPointerDown(event));
         canvas.addEventListener("pointermove", (event) => this.onPointerMove(event));
-        canvas.addEventListener("pointerup", () => this.onPointerUp());
-        canvas.addEventListener("pointerleave", () => this.onPointerUp());
+        canvas.addEventListener("pointerup", (event) => this.onPointerUp(event));
+        canvas.addEventListener("pointerleave", (event) => this.onPointerUp(event));
     }
 
     setState(state) {
@@ -237,9 +237,7 @@ export class UniverseRenderer {
     }
 
     updatePick() {
-        this.raycaster.setFromCamera({ x: this.pointer.x, y: this.pointer.y }, this.camera);
-        const hits = this.raycaster.intersectObjects([...this.planets.values()].map((entry) => entry.body));
-        const next = hits.length ? hits[0].object.userData.planetId : null;
+        const next = this.pickPlanetIdAtPointer();
         if (next !== this.hoverPlanetId) {
             this.hoverPlanetId = next;
             this.handlers.setHoverPlanetId(next);
@@ -258,6 +256,7 @@ export class UniverseRenderer {
     }
 
     onPointerDown(event) {
+        this.updatePointerFromEvent(event);
         this.pointer.down = true;
         this.pointer.moved = false;
         this.pointer.startX = event.clientX;
@@ -266,20 +265,33 @@ export class UniverseRenderer {
     }
 
     onPointerMove(event) {
-        const rect = this.renderer.domElement.getBoundingClientRect();
-        this.pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        this.pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        this.updatePointerFromEvent(event);
         if (this.pointer.down && (Math.abs(event.clientX - this.pointer.startX) > 4 || Math.abs(event.clientY - this.pointer.startY) > 4)) {
             this.pointer.moved = true;
         }
     }
 
-    onPointerUp() {
-        const click = this.pointer.down && !this.pointer.moved && this.hoverPlanetId;
+    onPointerUp(event) {
+        if (event) {
+            this.updatePointerFromEvent(event);
+        }
+        const clickTarget = this.pointer.down && !this.pointer.moved ? this.pickPlanetIdAtPointer() : null;
         this.pointer.down = false;
         this.pointer.moved = false;
         this.renderer.domElement.style.cursor = this.hoverPlanetId ? "pointer" : "grab";
-        if (click) this.handlers.selectPlanet(this.hoverPlanetId);
+        if (clickTarget) this.handlers.selectPlanet(clickTarget);
+    }
+
+    updatePointerFromEvent(event) {
+        const rect = this.renderer.domElement.getBoundingClientRect();
+        this.pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        this.pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    }
+
+    pickPlanetIdAtPointer() {
+        this.raycaster.setFromCamera({ x: this.pointer.x, y: this.pointer.y }, this.camera);
+        const hits = this.raycaster.intersectObjects([...this.planets.values()].map((entry) => entry.body));
+        return hits.length ? hits[0].object.userData.planetId : null;
     }
 }
 

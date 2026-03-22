@@ -84,7 +84,12 @@ function bootstrap() {
             saveUniverseState(state);
         },
         focusCenter() {
+            state.selectedPlanetId = null;
+            state.detailPanelOpen = false;
+            renderer?.setState(state);
             renderer?.focusCenter();
+            render();
+            saveUniverseState(state);
         },
         openDetail() {
             if (!state.selectedPlanetId) return;

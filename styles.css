@@ -42,6 +42,13 @@ body {
 button,
 input {
     font: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+select,
+textarea,
+.viewport-canvas canvas {
+    -webkit-tap-highlight-color: transparent;
 }
 
 .app-shell {
@@ -1160,15 +1167,18 @@ input {
     }
 
     .log-block {
+        position: fixed;
+        top: 50%;
         left: 50%;
         right: auto;
         width: min(calc(100vw - 24px), 440px);
         max-height: min(64vh, 560px);
-        transform: translateX(-50%) translateY(-8px) scale(0.98);
+        transform: translate(-50%, calc(-50% - 8px)) scale(0.98);
+        z-index: 30;
     }
 
     .log-block.is-open {
-        transform: translateX(-50%) translateY(0) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
 
     .selection-brief {
