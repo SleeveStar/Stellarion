@@ -10,6 +10,8 @@ if (typeof window !== "undefined") {
 
 function bootstrap() {
     let state = loadUniverseState(createRandomUniverse);
+    state.selectedPlanetId = null;
+    state.detailPanelOpen = false;
     state.detailPanelOpen = Boolean(state.detailPanelOpen);
     state.searchPanelOpen = Boolean(state.searchPanelOpen);
     state.logPanelOpen = Boolean(state.logPanelOpen);
@@ -73,6 +75,7 @@ function bootstrap() {
             renderer?.focusCenter();
         },
         openDetail() {
+            if (!state.selectedPlanetId) return;
             state.detailPanelOpen = true;
             render();
             saveUniverseState(state);
@@ -83,11 +86,13 @@ function bootstrap() {
             saveUniverseState(state);
         },
         updatePolicy(key, value) {
+            if (!state.selectedPlanetId) return;
             updatePlanetPolicy(state, state.selectedPlanetId, key, value);
             render();
             saveUniverseState(state);
         },
         updateProfile(key, value) {
+            if (!state.selectedPlanetId) return;
             updatePlanetProfile(state, state.selectedPlanetId, key, value);
             render();
             saveUniverseState(state);

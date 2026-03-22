@@ -56,13 +56,13 @@ export function createRandomUniverse() {
     seedRelations(planets, hyperlanes);
 
     return {
-        version: 6,
+        version: 7,
         year: 2473,
         cycle: 4,
         speed: 1,
         searchQuery: "",
         selectionMode: "자율 전략 관측",
-        selectedPlanetId: planets[0].id,
+        selectedPlanetId: null,
         planets,
         hyperlanes,
         logArchive: [

@@ -54,39 +54,58 @@ export function createUI(handlers) {
     return {
         dom,
         render(state) {
-            const selected = state.planets.find((planet) => planet.id === state.selectedPlanetId) ?? state.planets[0];
-            if (!selected) return;
+            const selected = state.planets.find((planet) => planet.id === state.selectedPlanetId) ?? null;
+            const hasSelection = Boolean(selected);
             if (dom.searchInput.value !== state.searchQuery) {
                 dom.searchInput.value = state.searchQuery;
             }
 
-            dom.heroTitle.textContent = selected.name;
-            dom.heroSummary.textContent = selected.summary;
-            dom.planetName.textContent = selected.name;
-            dom.planetBiome.textContent = selected.biome;
-            dom.planetGovernment.textContent = selected.government;
-            dom.planetPopulation.textContent = selected.population;
-            dom.planetThreat.textContent = selected.threat;
-            dom.planetDescription.textContent = selected.description;
-            dom.focusLabel.textContent = selected.focus;
-            dom.tensionLabel.textContent = selected.tension;
             dom.civilizationCount.textContent = String(state.planets.length).padStart(2, "0");
             dom.simState.textContent = state.speed === 0 ? "일시 정지 / 전술 대기" : `자동 관측 진행 / ${state.speed}배속`;
             dom.simYear.textContent = `주기 ${state.year}.${String(state.cycle).padStart(2, "0")}`;
             dom.selectionMode.textContent = state.selectionMode;
             dom.stage.classList.toggle("detail-open", Boolean(state.detailPanelOpen));
-            dom.selectionBrief.classList.toggle("is-hidden", Boolean(state.detailPanelOpen));
-            dom.detailDock.classList.toggle("is-open", Boolean(state.detailPanelOpen));
+            dom.selectionBrief.classList.toggle("is-hidden", !hasSelection || Boolean(state.detailPanelOpen));
+            dom.detailDock.classList.toggle("is-open", hasSelection && Boolean(state.detailPanelOpen));
             dom.searchBlock.classList.toggle("is-open", Boolean(state.searchPanelOpen));
             dom.logBlock.classList.toggle("is-open", Boolean(state.logPanelOpen));
             dom.toggleSearchButton.classList.toggle("is-active", Boolean(state.searchPanelOpen));
             dom.toggleLogButton.classList.toggle("is-active", Boolean(state.logPanelOpen));
 
-            renderMetrics(dom.metricGrid, selected.metrics);
-            renderActionCard(dom.currentAction, selected.currentAction, "현재 행동");
-            renderPolicyEditor(dom.policyEditor, selected, handlers);
-            renderAIEditor(dom.aiEditor, selected, handlers);
-            renderEvents(dom.eventFeed, selected.eventFeed);
+            if (selected) {
+                dom.heroTitle.textContent = selected.name;
+                dom.heroSummary.textContent = selected.summary;
+                dom.planetName.textContent = selected.name;
+                dom.planetBiome.textContent = selected.biome;
+                dom.planetGovernment.textContent = selected.government;
+                dom.planetPopulation.textContent = selected.population;
+                dom.planetThreat.textContent = selected.threat;
+                dom.planetDescription.textContent = selected.description;
+                dom.focusLabel.textContent = selected.focus;
+                dom.tensionLabel.textContent = selected.tension;
+                renderMetrics(dom.metricGrid, selected.metrics);
+                renderActionCard(dom.currentAction, selected.currentAction, "현재 행동");
+                renderPolicyEditor(dom.policyEditor, selected, handlers);
+                renderAIEditor(dom.aiEditor, selected, handlers);
+                renderEvents(dom.eventFeed, selected.eventFeed);
+            } else {
+                dom.heroTitle.textContent = "";
+                dom.heroSummary.textContent = "";
+                dom.planetName.textContent = "";
+                dom.planetBiome.textContent = "";
+                dom.planetGovernment.textContent = "";
+                dom.planetPopulation.textContent = "";
+                dom.planetThreat.textContent = "";
+                dom.planetDescription.textContent = "";
+                dom.focusLabel.textContent = "";
+                dom.tensionLabel.textContent = "";
+                dom.metricGrid.innerHTML = "";
+                dom.currentAction.innerHTML = "";
+                dom.policyEditor.innerHTML = "";
+                dom.aiEditor.innerHTML = "";
+                dom.eventFeed.innerHTML = "";
+            }
+
             renderSearchResults(dom.searchResults, state.planets, state.searchQuery, state.selectedPlanetId, handlers);
             renderArchive(dom.importantLogFeed, dom.archiveLogFeed, state.logArchive ?? []);
 

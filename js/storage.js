@@ -1,4 +1,4 @@
-const STORAGE_KEY = "stellar-atlas-universe-v6";
+const STORAGE_KEY = "stellar-atlas-universe-v7";
 
 export function loadUniverseState(createUniverse) {
     try {

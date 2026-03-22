@@ -1106,6 +1106,7 @@ input {
     }
 
     .topbar {
+        width: auto;
         top: 12px;
         left: 12px;
         right: 12px;
@@ -1128,8 +1129,8 @@ input {
         margin-left: 0;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        width: min(204px, 48vw);
-        gap: 6px;
+        width: min(176px, 44vw);
+        gap: 5px;
         flex-wrap: wrap;
     }
 
@@ -1137,8 +1138,10 @@ input {
     .hud-actions .detail-button,
     .hud-actions .reset-button,
     .speed-button {
-        padding: 8px 10px;
-        font-size: 0.74rem;
+        padding: 7px 8px;
+        font-size: 0.68rem;
+        line-height: 1.1;
+        border-radius: 12px;
     }
 
     .topbar-actions .detail-button {
@@ -1184,8 +1187,8 @@ input {
     .selection-brief-meta {
         min-width: 0;
         display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 7px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 6px;
         align-items: center;
     }
 
@@ -1199,11 +1202,16 @@ input {
 
     .selection-brief-meta .hud-chip,
     .selection-brief-meta .detail-button {
-        padding: 8px 10px;
+        padding: 7px 8px;
     }
 
     .selection-brief-meta .hud-chip strong {
-        font-size: 0.76rem;
+        font-size: 0.72rem;
+    }
+
+    .selection-brief-meta .detail-button {
+        min-width: 72px;
+        font-size: 0.68rem;
     }
 
     .detail-dock {
@@ -1265,15 +1273,16 @@ input {
     }
 
     .bottom-hud {
+        width: auto;
         left: 12px;
         right: 12px;
         bottom: 12px;
-        padding: 8px 10px;
+        padding: 7px 8px;
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
-        border-radius: 18px;
+        gap: 7px;
+        border-radius: 16px;
     }
 
     .hud-cluster {
@@ -1321,27 +1330,46 @@ input {
 
     .hud-actions {
         margin-left: 0;
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         width: 100%;
-        gap: 6px;
+        gap: 5px;
         justify-content: stretch;
     }
 
     .hud-actions .detail-button,
     .hud-actions .reset-button {
-        flex: 1 1 0;
         min-width: 0;
+        width: 100%;
     }
 
     .speed-controls {
         width: 100%;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 5px;
-        flex-wrap: wrap;
     }
 
     .speed-button {
-        flex: 1 1 calc(25% - 5px);
         min-width: 0;
+        width: 100%;
+        padding: 7px 6px;
+    }
+
+    .detail-button,
+    .detail-close,
+    .reset-button {
+        border-radius: 12px;
+    }
+
+    .hud-group strong,
+    .hud-chip strong {
+        font-size: 0.74rem;
+    }
+
+    .hud-label,
+    .hud-chip span {
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
     }
 }
