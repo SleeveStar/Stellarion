@@ -9,6 +9,7 @@ if (typeof window !== "undefined") {
 }
 
 function bootstrap() {
+    initBackgroundMusic();
     let state = loadUniverseState(createRandomUniverse);
     state.selectedPlanetId = null;
     state.detailPanelOpen = false;
@@ -147,4 +148,34 @@ function bootstrap() {
         state.selectionMode = hoverPlanetId ? "행성 전술 관측" : "자율 전략 관측";
         ui.render(state);
     }
+}
+
+function initBackgroundMusic() {
+    const audio = document.getElementById("bgm-player");
+    if (!audio) return;
+
+    audio.volume = 0.42;
+
+    const tryPlay = () => {
+        const playback = audio.play();
+        if (playback && typeof playback.catch === "function") {
+            playback.catch(() => {
+                // Browser autoplay policy may require an explicit user interaction.
+            });
+        }
+    };
+
+    const unlockPlayback = () => {
+        tryPlay();
+        if (!audio.paused) {
+            window.removeEventListener("pointerdown", unlockPlayback);
+            window.removeEventListener("keydown", unlockPlayback);
+            window.removeEventListener("touchstart", unlockPlayback);
+        }
+    };
+
+    tryPlay();
+    window.addEventListener("pointerdown", unlockPlayback, { passive: true });
+    window.addEventListener("keydown", unlockPlayback, { passive: true });
+    window.addEventListener("touchstart", unlockPlayback, { passive: true });
 }
